@@ -1,0 +1,38 @@
+# Constitution
+
+## Current Summary
+- Status: Active
+- Last Updated: [Date]
+- Execution Rigor Mode: [Full Rigor (Live verified commands & tests mandatory) | Reduced Rigor (Code-Review only)]
+- Version Control Mode: [Git Mode | Snapshot Mode]
+
+## Tech Stack & Versions
+- Primary Language & Runtime: [e.g., TypeScript Node 20, Python 3.12, .NET 8]
+- Framework: [e.g., Next.js 14, Django 5.1, Fastify]
+- Database & ORM/Driver: [e.g., PostgreSQL + Dapper, SQLite + Prisma]
+- Testing Framework: [e.g., Jest, Pytest, Vitest]
+- Clean Baseline Check Result: [Pass / Fail (list pre-existing failures if any)]
+
+## Coding Conventions & Architecture
+- Pattern: [e.g., Clean Architecture, Modular Monolith, Layered Service-Repository]
+- File Structure Conventions: [e.g., kebab-case filenames, feature-sliced folders]
+
+## UI Design Source of Truth
+- Source Type: [None (Headless / API / CLI) | Prototype ($PROTOTYPE_DIR) | Source Code Views (<path>)]
+- Reference Path: [e.g., ./ui-prototype/ or legacy_app/app/views/]
+- Parity Standard: [3-point Prototype Parity | 1-to-1 Source View Parity | N/A]
+- Rule: The chosen stack recreates this design natively in its own idiom (components/templates/views). The design source of truth is strictly READ-ONLY and must NEVER be modified or directly executed by runtime backend logic (unless the stack is plain static HTML/JS).
+
+## Non-Negotiable Constraints
+- Execution Rigor Mode: [Full Rigor | Reduced Rigor (Code-Review only)]
+- All public endpoints require schema validation.
+- All database modifications require atomic transactions where applicable.
+- Secrets must never be hardcoded.
+
+## Avoid-List (Anti-Drift Rules)
+- DO NOT USE: [List ecosystem counter-defaults, e.g., if Dapper -> no EF Core; if Prisma -> no TypeORM]
+
+## Change Log
+| Date | Change Description | Confirmed By |
+|---|---|---|
+| YYYY-MM-DD | Initial Constitution Established | User |

@@ -1,0 +1,77 @@
+# Migration & Conversion Plan: [Target Application Name]
+
+> **Purpose:** Detailed architectural migration blueprint produced by **Road B (Step B5)** and approved by the user before execution in **Road C**.
+
+---
+
+## 1. Target Architecture & Technology Stack
+- **Target Language & Runtime:** [e.g., TypeScript Node 20, Python 3.12, .NET 8, Go 1.22]
+- **Target Framework:** [e.g., Next.js 14, Fastify, Django 5.1, ASP.NET Core]
+- **Target Database & Data Access:** [e.g., PostgreSQL 16 + Dapper / PostgreSQL 16 + Prisma]
+- **Target Auth & Session Model:** [e.g., JWT Bearer with refresh cookies, Session cookies]
+- **Target UI Strategy:**
+  - `[UI Strategy Chosen]`: [1-to-1 Native Re-creation from source UI | Modernized UI via Road U & Theme]
+  - `[UI Source of Truth]`: [Source Code Views OR `./ui-prototype/`]
+- **Execution Rigor Mode:** [Full Rigor (verified commands & tests mandatory) | Reduced Rigor (Code-Review only)]
+
+---
+
+## 2. Missing Parts & Alternates Resolution
+*(Captures any source elements missing during Step B1 health check and their target solutions)*
+
+| Missing Source Component | Impact / Risk | Agreed Target Alternate / Resolution |
+| :--- | :--- | :--- |
+| [e.g., Source background worker config] | Async jobs not configured | Will implement native BullMQ queue in target stack |
+| [e.g., Missing legacy DB seed data] | Hard to test empty state | Seed generator task added to Phase 2 of migration |
+
+---
+
+## 3. Dynamic Avoid-List (Anti-Drift Constraints)
+*(Counter-defaults derived strictly from target stack decisions)*
+
+- ⛔ **DO NOT USE:** [e.g., If Dapper chosen -> DO NOT USE Entity Framework Core or Linq-to-SQL]
+- ⛔ **DO NOT USE:** [e.g., If Fastify chosen -> DO NOT USE Express middleware or Express types]
+- ⛔ **DO NOT USE:** [e.g., If Tailwind chosen -> DO NOT USE inline CSS or Bootstrap classes]
+- ⛔ **DO NOT USE:** [e.g., If JWT chosen -> DO NOT USE stateful in-memory server sessions]
+
+---
+
+## 4. 6-Phase Conversion Roadmap
+
+### Phase 1: Environment, Database & Schema Migration
+- Target project scaffolding and dependency setup.
+- Target schema migration DDL creation matching source tables.
+- ORM/Driver model definitions and foreign key constraints.
+
+### Phase 2: Core Data Access & Repositories
+- CRUD operations for each core entity.
+- Porting complex database queries, indexes, and aggregations.
+- Automated tests verifying basic persistence against live target database.
+
+### Phase 3: Business Logic & Hidden-Logic Porting
+- Porting source callbacks, triggers, and lifecycle signals into explicit target domain services.
+- Exact implementation of all items in `ANALYSIS.md` Section 4.
+- Integration tests validating all edge cases.
+
+### Phase 4: API, Endpoints & Authentication
+- Controller / Route handler endpoints matching source URLs and status codes.
+- Authentication, authorization guards, and permission policies.
+- Execution of **Migration Parity Check (Road C Step C9)** verifying sample payloads from `ANALYSIS.md` Section 5.
+
+### Phase 5: UI Integration & End-to-End Verification
+- Recreating views natively (1-to-1 or via Road U prototype).
+- End-to-end user journeys (login, submit form, view dashboard).
+- Final regression audit and deployment packaging.
+
+### Phase 6: Data Cutover, Verification & Rollback Strategy
+- Data extraction & transformation scripts (legacy DB -> target schema ETL).
+- Dry-run validation & row-count/checksum verification scripts.
+- Zero-downtime / maintenance-window cutover runbook.
+- Rollback triggers and failback procedures (dual-write, reverse sync, or snapshot restore).
+
+---
+
+## 5. Conversion Plan Approval Record
+- **Review Date:** [YYYY-MM-DD]
+- **Approval Status:** [Approved by User]
+- **User Specific Directives / Exceptions:** [None or custom notes listed here]

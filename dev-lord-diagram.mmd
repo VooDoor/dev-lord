@@ -1,0 +1,324 @@
+flowchart TD
+    Start(["User Request / Boot"]) --> FastPath{"Intent Fast-Path: Unambiguous Directive?"}
+
+    %% Fast Path Direct Routing
+    FastPath -->|"Resume: continue task..."| RoadD["Road D: Session Resume Protocol"]
+    FastPath -->|"UI: prototype screens..."| RoadU["Road U: UI Prototype Architect"]
+    FastPath -->|"Migrate: port app from X to Y"| RoadB["Road B: Re-Platform Architect"]
+    FastPath -->|"Greenfield: spec idea..."| RoadA["Road A: Greenfield Spec Architect"]
+    FastPath -->|"Small Fix: 1-3 files"| RoadCLite["Road C-Lite: Express Track"]
+
+    %% Ambiguous Intent -> Workspace Triage
+    FastPath -->|"Ambiguous Intent"| RootCheck{"Inspect Workspace: does .devop-process/ exist?"}
+
+    %% Boot Branching with .devop-process/
+    RootCheck -->|"Yes"| KernelCheck["Kernel Integrity Check: Seed any missing files"]
+    KernelCheck --> BootResume{"Active Project Detected: How to proceed?"}
+    BootResume -->|"[1] Resume active work"| RoadD
+    BootResume -->|"[2] Add feature / report bug"| Q1{"Question Q1: Scope Check"}
+    BootResume -->|"[3] Start fresh activity"| Q0["Wizard Question Q0"]
+
+    %% Boot Branching without .devop-process/
+    RootCheck -->|"No"| ArtifactCheck{"Detect Workspace Artifacts? (ui-prototype/, MASTER_SPEC, ANALYSIS, MIGRATION_PROMPT)"}
+    ArtifactCheck -->|"ui-prototype/ exists"| ResumeU{"[1] Resume UI Prototype | [2] Implement Native"}
+    ResumeU -->|"[1]"| RoadU
+    ResumeU -->|"[2]"| RoadCFull["Road C: Step C1 - Bootstrap & Kernel Invariant"]
+    ArtifactCheck -->|"MASTER_SPEC.md exists"| ResumeSpec{"[1] Prototype UI | [2] Implement Native"}
+    ResumeSpec -->|"[1]"| RoadU
+    ResumeSpec -->|"[2]"| StepC2["Road C: Step C2 - Constitution Gate"]
+    ArtifactCheck -->|"ANALYSIS or MIGRATION_PROMPT exists"| ResumeMigrate{"[1] Prototype UI | [2] Live Migration"}
+    ResumeMigrate -->|"[1]"| RoadU
+    ResumeMigrate -->|"[2]"| SeedBX2["[BX-2] Seed Kernel & Baseline Test Check"]
+    SeedBX2 --> StepC6["Road C: Step C6 - Task Sizing & Risk Flagging"]
+    ArtifactCheck -->|"None detected"| Q0
+
+    %% Q0 Routing (Disambiguated [1]..[5])
+    Q0 -->|"[1] Greenfield Idea"| RoadA
+    Q0 -->|"[2] Re-Platform / Migrate"| RoadB
+    Q0 -->|"[3] Implement, Fix, or Refactor"| Q1
+    Q0 -->|"[4] Ready Spec"| BridgeSpec["Seed spec.md & constitution.md"]
+    BridgeSpec --> StepC2
+    Q0 -->|"[5] Prototype UI (Theme or AI-Crafted)"| RoadU
+
+    %% Scope Check
+    Q1 -->|"1-3 files, isolated, low risk"| RoadCLite
+    Q1 -->|"Multi-file, schema, auth, high risk"| RoadCFull
+
+    %% Road A Flow & Crossing A-X
+    RoadA --> A1["Phase A1: Passive Ingestion Mode"]
+    A1 -->|"Input: i am done, start the doc"| A2["Phase A2: Tech-Stack Agnostic Master Spec (6 Sections)"]
+    A2 -->|"Input: initial draft approved"| A3["Phase A3: Sequential 1-at-a-time Advisory"]
+    A3 -->|"Input: advisory complete"| A4["Phase A4: Consolidated Final Spec Approval"]
+    A4 --> GateAX{"Intersection Gate A-X"}
+    GateAX -->|"[AX-1] Export Master Prompt"| DeliverySpec["Export MASTER_SPEC.md"]
+    GateAX -->|"[AX-2] Select Stack & Build"| BridgeAtoC["Derive Avoid-List, Confirm Constitution & Seed All 6 Files"]
+    BridgeAtoC --> StepC5["Road C: Step C5 - Architecture Plan Gate"]
+    GateAX -->|"[AX-3] Prototype UI First (if UI app)"| BridgeAtoU["Pass Section 3 to Road U Step U0 (origin: road-a)"]
+    BridgeAtoU --> RoadU
+
+    %% Road U Dual Prototyping Modes & Crossing U-X
+    RoadU --> U0{"Step U0: Prototyping Mode Selection"}
+    U0 -->|"[A] Theme-Based Prototype"| U_Theme["Subagent Ingestion: <THEME_OUTPUT_DIR>/theme_report.md & theme-digest.md"]
+    U_Theme --> U_Copy["Wholesale Native Copy of Assets to $PROTOTYPE_DIR/assets/"]
+    U0 -->|"[B] AI-Crafted Modern UI"| U_AI["Generate Modern CSS Variable Tokens, Grid & SVG Icons"]
+    U_Copy --> U_Prep["U1-U6: Language Scope, Screen Inventory (Spec-less Intake if needed), Skin/Tokens, .prototype-state.json"]
+    U_AI --> U_Prep
+    U_Prep --> U_Gen["U7: Hierarchical Subagent Screen Loop (1 screen at a time) + U7-R Spec Sync"]
+    U_Gen --> U_Val["U8-U13: Wizards, Nav Link Audit, Consistency, Quality Pass & Physical Asset Verification"]
+    U_Val --> U_Sync{"Step U13-S: Spec ↔ Prototype Sync Audit (HARD GATE)"}
+    U_Sync -->|"Mismatch"| U7_R["Step U7-R: Reconcile Spec with User Approval"]
+    U7_R --> U_Sync
+    U_Sync -->|"SYNCED / N-A"| GateUX{"Intersection Gate U-X"}
+    GateUX -->|"[UX-1] Revise Prototype"| U_Revise["Loop back to Step U4 or Step U7 (+ U7-R)"]
+    U_Revise --> U_Gen
+    GateUX -->|"[UX-2] Approve & Build Native"| UX_Branch{"Origin Branching Check"}
+    UX_Branch -->|"origin: road-c-detour"| DetourReturn["Return directly to caller Step C3 or C5/C6 (Sync Spec & Constitution)"]
+    UX_Branch -->|"origin: road-b"| BridgeUtoC_B["Seed .devop-process/ & Clean Baseline Test Check"]
+    BridgeUtoC_B --> StepC6
+    UX_Branch -->|"origin: road-a"| BridgeUtoC_A["Prompt for Stack, Seed Spec & Constitution"]
+    BridgeUtoC_A --> RoadCFull
+    UX_Branch -->|"origin: standalone"| BridgeUtoC_S["Prompt for Stack & Bootstrap Road C"]
+    BridgeUtoC_S --> RoadCFull
+    GateUX -->|"[UX-3] Standalone Deliverable"| DeliveryU["Deliver $PROTOTYPE_DIR Standalone (Preserve State)"]
+
+    %% Road B Flow & Crossing B-X
+    RoadB --> B1_Health["B1: Coordinates & Manifest Pre-Flight Health Check"]
+    B1_Health --> B2_Cap["B2: Execution Capability Check (Full Rigor vs Reduced Rigor)"]
+    B2_Cap --> B3_Disc["B3: Hidden-Logic Discovery & Parity Samples"]
+    B3_Disc --> B4_Advis["B4: Target Architecture Advisory (Q4 Auth & Q6 UI are conditional)"]
+    B4_Advis --> B5_Comp["B5: Avoid-List, ANALYSIS.md, CONVERSION_PLAN.md"]
+    B5_Comp --> GateB_Approve{"Blueprint Review & Approval Gate"}
+    GateB_Approve -->|"Approved"| GateBX{"Intersection Gate B-X"}
+    GateBX -->|"[BX-1] Export 6-Phase Migration Prompt"| DeliveryPrompt["Export MIGRATION_PROMPT.md"]
+    GateBX -->|"[BX-2] Live Migration"| BridgeBtoC["Seed constitution (Rigor & UI Source), spec, plan, tasks, log & Baseline Test"]
+    BridgeBtoC --> StepC6
+    GateBX -->|"[BX-3] UI Prototype First"| BridgeBtoU["Pass ANALYSIS.md Section 3 to Road U Step U0 (origin: road-b)"]
+    BridgeBtoU --> RoadU
+
+    %% Road C Full Execution Loop
+    RoadCFull --> StepC2
+    StepC2 --> StepC3["Step C3: Specify & Decompose (UI Requirements Scoped to Scope)"]
+    StepC3 --> StepC4["Step C4: Clarify Gate (HARD GATE - Structured Options 1 at a time)"]
+    StepC4 --> StepC5
+    StepC5 --> C5_Detour{"New UI screens needed?"}
+    C5_Detour -->|"Yes (Detour)"| RoadU
+    C5_Detour -->|"No"| C5_PlanApprove["Record Plan Approval Status & Plan Approval Record in plan.md"]
+    C5_PlanApprove --> StepC6
+    StepC6 --> StepC7["Step C7: Coverage Audit (Write Linked Tasks to spec.md) & 3-Way Stress Test"]
+    StepC7 --> FeatureBranch["Adopt Active Feature Branch OR Checkout New -> Log in progress-log.md"]
+    FeatureBranch --> WorktreeGuard{"Dirty Worktree Check"}
+    WorktreeGuard -->|"Dirty outside task"| PromptWorktree["Prompt User: Commit, Stash, Keep, Discard"]
+    WorktreeGuard -->|"Clean"| StepC8["Step C8: Atomic Implementation Loop (Subagent Worker Pattern)"]
+    PromptWorktree --> StepC8
+    StepC8 --> StepC9["Step C9: Real Verification Gate (Full Rigor vs Reduced Rigor)"]
+
+    %% Step C9 Diagnostics & Circuit Breakers
+    StepC9 -->|"Fail: Environment"| EnvFix["Fix Environment & Re-run Verification"]
+    EnvFix --> StepC9
+    StepC9 -->|"Fail: Code Logic (Attempt 1 or 2)"| CodeRevert["Targeted Revert: git restore / snapshot & Increment Failure Counter"]
+    CodeRevert --> StepC8
+    StepC9 -->|"Fail: Code Logic (Attempt 3)"| CircuitBreaker["CIRCUIT BREAKER: Tag ARCHITECTURE-REVIEW in tasks.md"]
+    CircuitBreaker --> StepC5_Replan["Step C5: Circuit Breaker Replanning Exit Protocol"]
+    StepC5_Replan -->|"User Approves Fix"| ResetTask["Reset Task to OPEN (0 failures) OR Retire as SUPERSEDED with Sub-tasks"]
+    ResetTask --> StepC8
+    StepC9 -->|"Pass: Verification Succeeded"| QualityPass["Lightweight Quality Pass (Lint, Security, Types)"]
+    QualityPass --> CommitTask["Reset Failures to 0, Dual-Summary Updates, Atomic Commit / Snapshot"]
+    CommitTask --> StepC10{"Step C10: Check Session Context Health"}
+
+    StepC10 -->|"Degraded: 40+ turns / re-reads"| Handoff["Handoff Protocol: Save to Disk & Stop cleanly"]
+    StepC10 -->|"Healthy & Open Tasks Remain"| StepC8
+    StepC10 -->|"Healthy & All Tasks Completed"| StepC11["Step C11: Final Validation Gate (Verify spec & plan status)"]
+    StepC11 --> StepC12["Step C12: Delivery, Honest Rigor Framing & Disposition (Branch vs Snapshot)"]
+
+    %% Road C-Lite & Graduation
+    RoadCLite --> L1["L1: Pre-Edit Baseline Check, Scope & Constitution Avoid-List Check"]
+    L1 --> L2["L2: Implement with Targeted Revert Safety"]
+    L2 --> L3["L3: Real Execution Verification (Same Standard as C9)"]
+    L3 -->|"Scope Expands or Hits Schema/Auth"| LiteGraduation["LITE GRADUATION: Enforce Kernel Completeness Rule -> Step C3"]
+    LiteGraduation --> StepC3
+    L3 -->|"Verified & Passed"| L4["L4: Atomic Commit (if Git) & Append progress-log.md"]
+    L4 --> L5["L5: Delivery Report with Real Output Evidence"]
+
+    %% Road D Entry & Recovery
+    RoadD --> D_Read["Step D1: Focused Reading (constitution, progress-log summary, tasks index, plan approval)"]
+    D_Read --> D_Branch["Step D2: Branch/Snapshot Reconciliation & Git Log Reconciliation"]
+    D_Branch --> D_Route{"Step D3: Detour Guard & Task/Plan Status Check"}
+    D_Route -->|"In-Flight UI Detour (ui-prototype/)"| RoadU
+    D_Route -->|"Express Lite Track (Guard 0-Lite)"| RoadCLite
+    D_Route -->|"Early Lifecycle (Spec/Plan incomplete)"| StepC3C5["Step C3 / C5: Complete Planning"]
+    D_Route -->|"Plan Unapproved / In Revision"| StepC5
+    D_Route -->|"T_next is ARCHITECTURE-REVIEW"| StepC5_Replan
+    D_Route -->|"T_next is BLOCKED"| UnblockTask["Prompt User to Resolve Blocker -> Set OPEN"]
+    UnblockTask --> StepC8
+    D_Route -->|"T_next is OPEN / PENDING"| StepC8
+    D_Route -->|"All Tasks DONE"| StepC11
+
+    %% =========================================================================
+    %% COLOR CODING & VISUAL PALETTE (Dev-Lord Unified Styling)
+    %% =========================================================================
+    classDef bootStyle fill:#1e293b,stroke:#64748b,stroke-width:2px,color:#f8fafc;
+    classDef gateStyle fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#e0e7ff;
+    classDef roadAStyle fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#d1fae5;
+    classDef roadUStyle fill:#701a75,stroke:#d946ef,stroke-width:2px,color:#fdf4ff;
+    classDef roadBStyle fill:#78350f,stroke:#f59e0b,stroke-width:2px,color:#fef3c7;
+    classDef roadCStyle fill:#0c4a6e,stroke:#0284c7,stroke-width:2px,color:#e0f2fe;
+    classDef roadCLiteStyle fill:#134e4a,stroke:#14b8a6,stroke-width:2px,color:#ccfbf1;
+    classDef roadDStyle fill:#1c1917,stroke:#78716c,stroke-width:2px,color:#f5f5f4;
+    classDef dangerStyle fill:#7f1d1d,stroke:#ef4444,stroke-width:2px,color:#fee2e2;
+    classDef successStyle fill:#14532d,stroke:#22c55e,stroke-width:2px,color:#dcfce7;
+
+    %% Apply Boot & Triage
+    class Start,FastPath,RootCheck,KernelCheck,BootResume,ArtifactCheck,ResumeU,ResumeSpec,ResumeMigrate,Q0,Q1,WorktreeGuard,PromptWorktree bootStyle;
+
+    %% Apply Gates & Crossings
+    class GateAX,GateUX,GateB_Approve,GateBX,C5_Detour,StepC10,D_Route,U0,U_Sync,UX_Branch gateStyle;
+
+    %% Apply Road A (Emerald)
+    class RoadA,A1,A2,A3,A4,BridgeAtoC,BridgeAtoU roadAStyle;
+
+    %% Apply Road U (Fuchsia / Purple)
+    class RoadU,U_Theme,U_Copy,U_AI,U_Prep,U_Gen,U_Val,U_Revise,U7_R,BridgeUtoC_B,BridgeUtoC_A,BridgeUtoC_S,DetourReturn roadUStyle;
+
+    %% Apply Road B (Amber / Gold)
+    class RoadB,B1_Health,B2_Cap,B3_Disc,B4_Advis,B5_Comp,BridgeBtoC,BridgeBtoU roadBStyle;
+
+    %% Apply Road C Full Track (Sky Blue)
+    class RoadCFull,StepC2,StepC3,StepC4,StepC5,C5_PlanApprove,StepC6,StepC7,FeatureBranch,StepC8,StepC9,CommitTask,StepC11,StepC12,BridgeSpec,StepC5_Replan,ResetTask,UnblockTask roadCStyle;
+
+    %% Apply Road C-Lite (Teal)
+    class RoadCLite,L1,L2,L3,L4,L5 roadCLiteStyle;
+
+    %% Apply Road D (Stone Slate)
+    class RoadD,D_Read,D_Branch roadDStyle;
+
+    %% Apply Danger / Safeguards (Red)
+    class CircuitBreaker,Handoff,LiteGraduation,EnvFix,CodeRevert dangerStyle;
+
+    %% Apply Deliveries & Success (Vibrant Green)
+    class DeliverySpec,DeliveryU,DeliveryPrompt successStyle;
+
+    %% =========================================================================
+    %% CONNECTION LINE STYLES (121 Unique Colors - No Duplicates)
+    %% =========================================================================
+    linkStyle 0 stroke:#ed1d1d,stroke-width:2.5px;
+    linkStyle 1 stroke:#29f566,stroke-width:2.5px;
+    linkStyle 2 stroke:#a936fc,stroke-width:2.5px;
+    linkStyle 3 stroke:#f1df55,stroke-width:2.5px;
+    linkStyle 4 stroke:#63dff8,stroke-width:2.5px;
+    linkStyle 5 stroke:#fb0e8d,stroke-width:2.5px;
+    linkStyle 6 stroke:#5fee2f,stroke-width:2.5px;
+    linkStyle 7 stroke:#453cf6,stroke-width:2.5px;
+    linkStyle 8 stroke:#fc864a,stroke-width:2.5px;
+    linkStyle 9 stroke:#68f3c0,stroke-width:2.5px;
+    linkStyle 10 stroke:#e115f4,stroke-width:2.5px;
+    linkStyle 11 stroke:#ccfc22,stroke-width:2.5px;
+    linkStyle 12 stroke:#4299f0,stroke-width:2.5px;
+    linkStyle 13 stroke:#f75071,stroke-width:2.5px;
+    linkStyle 14 stroke:#5efd6b,stroke-width:2.5px;
+    linkStyle 15 stroke:#6c1ded,stroke-width:2.5px;
+    linkStyle 16 stroke:#f5b129,stroke-width:2.5px;
+    linkStyle 17 stroke:#36fcf5,stroke-width:2.5px;
+    linkStyle 18 stroke:#f155ca,stroke-width:2.5px;
+    linkStyle 19 stroke:#a6f863,stroke-width:2.5px;
+    linkStyle 20 stroke:#0e35fb,stroke-width:2.5px;
+    linkStyle 21 stroke:#ee492f,stroke-width:2.5px;
+    linkStyle 22 stroke:#3cf68a,stroke-width:2.5px;
+    linkStyle 23 stroke:#ca4afc,stroke-width:2.5px;
+    linkStyle 24 stroke:#f3f368,stroke-width:2.5px;
+    linkStyle 25 stroke:#15b1f4,stroke-width:2.5px;
+    linkStyle 26 stroke:#fc227d,stroke-width:2.5px;
+    linkStyle 27 stroke:#57f042,stroke-width:2.5px;
+    linkStyle 28 stroke:#6c50f7,stroke-width:2.5px;
+    linkStyle 29 stroke:#fda85e,stroke-width:2.5px;
+    linkStyle 30 stroke:#1dedb9,stroke-width:2.5px;
+    linkStyle 31 stroke:#f529eb,stroke-width:2.5px;
+    linkStyle 32 stroke:#bafc36,stroke-width:2.5px;
+    linkStyle 33 stroke:#558ef1,stroke-width:2.5px;
+    linkStyle 34 stroke:#f86370,stroke-width:2.5px;
+    linkStyle 35 stroke:#0efb41,stroke-width:2.5px;
+    linkStyle 36 stroke:#8f2fee,stroke-width:2.5px;
+    linkStyle 37 stroke:#f6d13c,stroke-width:2.5px;
+    linkStyle 38 stroke:#4aedfc,stroke-width:2.5px;
+    linkStyle 39 stroke:#f368be,stroke-width:2.5px;
+    linkStyle 40 stroke:#5ff415,stroke-width:2.5px;
+    linkStyle 41 stroke:#2229fc,stroke-width:2.5px;
+    linkStyle 42 stroke:#f06e42,stroke-width:2.5px;
+    linkStyle 43 stroke:#50f7ac,stroke-width:2.5px;
+    linkStyle 44 stroke:#e25efd,stroke-width:2.5px;
+    linkStyle 45 stroke:#d1ed1d,stroke-width:2.5px;
+    linkStyle 46 stroke:#29a0f5,stroke-width:2.5px;
+    linkStyle 47 stroke:#fc366e,stroke-width:2.5px;
+    linkStyle 48 stroke:#55f155,stroke-width:2.5px;
+    linkStyle 49 stroke:#9063f8,stroke-width:2.5px;
+    linkStyle 50 stroke:#fb980e,stroke-width:2.5px;
+    linkStyle 51 stroke:#2feed8,stroke-width:2.5px;
+    linkStyle 52 stroke:#f63cd7,stroke-width:2.5px;
+    linkStyle 53 stroke:#a9fc4a,stroke-width:2.5px;
+    linkStyle 54 stroke:#688bf3,stroke-width:2.5px;
+    linkStyle 55 stroke:#f42015,stroke-width:2.5px;
+    linkStyle 56 stroke:#22fc6b,stroke-width:2.5px;
+    linkStyle 57 stroke:#b042f0,stroke-width:2.5px;
+    linkStyle 58 stroke:#f7e950,stroke-width:2.5px;
+    linkStyle 59 stroke:#5edafd,stroke-width:2.5px;
+    linkStyle 60 stroke:#ed1d85,stroke-width:2.5px;
+    linkStyle 61 stroke:#52f529,stroke-width:2.5px;
+    linkStyle 62 stroke:#4736fc,stroke-width:2.5px;
+    linkStyle 63 stroke:#f19155,stroke-width:2.5px;
+    linkStyle 64 stroke:#63f8c6,stroke-width:2.5px;
+    linkStyle 65 stroke:#f30efb,stroke-width:2.5px;
+    linkStyle 66 stroke:#bbee2f,stroke-width:2.5px;
+    linkStyle 67 stroke:#3c90f6,stroke-width:2.5px;
+    linkStyle 68 stroke:#fc4a65,stroke-width:2.5px;
+    linkStyle 69 stroke:#68f37b,stroke-width:2.5px;
+    linkStyle 70 stroke:#7615f4,stroke-width:2.5px;
+    linkStyle 71 stroke:#fcbe22,stroke-width:2.5px;
+    linkStyle 72 stroke:#42edf0,stroke-width:2.5px;
+    linkStyle 73 stroke:#f750c5,stroke-width:2.5px;
+    linkStyle 74 stroke:#9efd5e,stroke-width:2.5px;
+    linkStyle 75 stroke:#1d35ed,stroke-width:2.5px;
+    linkStyle 76 stroke:#f54e29,stroke-width:2.5px;
+    linkStyle 77 stroke:#36fc92,stroke-width:2.5px;
+    linkStyle 78 stroke:#cd55f1,stroke-width:2.5px;
+    linkStyle 79 stroke:#f0f863,stroke-width:2.5px;
+    linkStyle 80 stroke:#0ea8fb,stroke-width:2.5px;
+    linkStyle 81 stroke:#ee2f75,stroke-width:2.5px;
+    linkStyle 82 stroke:#49f63c,stroke-width:2.5px;
+    linkStyle 83 stroke:#714afc,stroke-width:2.5px;
+    linkStyle 84 stroke:#f3b068,stroke-width:2.5px;
+    linkStyle 85 stroke:#15f4c7,stroke-width:2.5px;
+    linkStyle 86 stroke:#fc22e6,stroke-width:2.5px;
+    linkStyle 87 stroke:#adf042,stroke-width:2.5px;
+    linkStyle 88 stroke:#5085f7,stroke-width:2.5px;
+    linkStyle 89 stroke:#fd5e64,stroke-width:2.5px;
+    linkStyle 90 stroke:#1ded54,stroke-width:2.5px;
+    linkStyle 91 stroke:#9929f5,stroke-width:2.5px;
+    linkStyle 92 stroke:#fcde36,stroke-width:2.5px;
+    linkStyle 93 stroke:#55dcf1,stroke-width:2.5px;
+    linkStyle 94 stroke:#f863b7,stroke-width:2.5px;
+    linkStyle 95 stroke:#51fb0e,stroke-width:2.5px;
+    linkStyle 96 stroke:#332fee,stroke-width:2.5px;
+    linkStyle 97 stroke:#f6743c,stroke-width:2.5px;
+    linkStyle 98 stroke:#4afcb5,stroke-width:2.5px;
+    linkStyle 99 stroke:#e368f3,stroke-width:2.5px;
+    linkStyle 100 stroke:#cbf415,stroke-width:2.5px;
+    linkStyle 101 stroke:#2296fc,stroke-width:2.5px;
+    linkStyle 102 stroke:#f0426b,stroke-width:2.5px;
+    linkStyle 103 stroke:#50f758,stroke-width:2.5px;
+    linkStyle 104 stroke:#965efd,stroke-width:2.5px;
+    linkStyle 105 stroke:#eda01d,stroke-width:2.5px;
+    linkStyle 106 stroke:#29f5e7,stroke-width:2.5px;
+    linkStyle 107 stroke:#fc36d1,stroke-width:2.5px;
+    linkStyle 108 stroke:#a1f155,stroke-width:2.5px;
+    linkStyle 109 stroke:#6381f8,stroke-width:2.5px;
+    linkStyle 110 stroke:#fb260e,stroke-width:2.5px;
+    linkStyle 111 stroke:#2fee79,stroke-width:2.5px;
+    linkStyle 112 stroke:#bb3cf6,stroke-width:2.5px;
+    linkStyle 113 stroke:#fcf64a,stroke-width:2.5px;
+    linkStyle 114 stroke:#68cef3,stroke-width:2.5px;
+    linkStyle 115 stroke:#f41579,stroke-width:2.5px;
+    linkStyle 116 stroke:#43fc22,stroke-width:2.5px;
+    linkStyle 117 stroke:#5942f0,stroke-width:2.5px;
+    linkStyle 118 stroke:#f79850,stroke-width:2.5px;
+    linkStyle 119 stroke:#5efdd0,stroke-width:2.5px;
+    linkStyle 120 stroke:#ed1de9,stroke-width:2.5px;
+    linkStyle 121 stroke:#14b8a6,stroke-width:2.5px;

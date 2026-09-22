@@ -1,0 +1,35 @@
+# Tasks
+
+## Current Summary
+- Total Tasks: [N]
+- Completed: [N]
+- In-Flight / Open: [N]
+- Next Task: [T00X]
+
+## Task Index
+| Task ID | Title | Status | Depends On | Req ID | Risk Level | Test Added? |
+|---|---|---|---|---|---|---|
+| T001 | [Task Title] | DONE | - | R1 | NORMAL | YES |
+| T002 | [Task Title] | OPEN | T001 | R1 | HIGH | YES |
+| T003 | [Task Title] | PENDING | T002 | R2 | NORMAL | EXEMPT (UI only) |
+
+---
+
+## Task Details
+
+### [T001] [Task Title]
+- **Status:** [PENDING / IN-PROGRESS / DONE / BLOCKED / ARCHITECTURE-REVIEW / SUPERSEDED]
+- **Parent Requirement:** [R1]
+- **Dependencies:** [None or T00X]
+- **Target Files (<= 5 files limit):**
+  - `path/to/file1.ext`
+  - `path/to/file2.ext`
+- **Acceptance Criterion:** [Single concrete, verifiable outcome]
+- **Verification Command / Check:** [e.g., `npm test -- test/auth.test.js` or `curl -f http://localhost:3000/api/health`]
+- **Mandatory Test Coverage:** [YES (test file created) / EXEMPT (UI/styling/config-only)]
+- **Risk Flag:** [NORMAL / HIGH (auth, payments, permissions, data deletion, external APIs)]
+- **Worst-Case If Wrong (Mandatory for HIGH risk):** [One-line worst-case impact]
+- **Prototype Reference (Road-U-origin screen recreation only):** [Path to source prototype HTML screen, e.g., `./ui-prototype/dashboard.html`]
+- **Parity Baseline Reference (Road-B migration only):** [Reference to ANALYSIS.md Section 5 test case, e.g., Sample Case 1]
+- **Consecutive Verification Failures:** [0 / 1 / 2 / 3 -> triggers circuit breaker to Step C5]
+- **Blocked Reason:** [None / Waiting on specific external credential, service, or user input]

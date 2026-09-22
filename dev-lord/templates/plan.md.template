@@ -1,0 +1,38 @@
+# Implementation Plan
+
+## Current Summary
+- Approval Status: [Pending Approval / Approved / In Revision]
+- Last Revision Date: [Date]
+- Target Milestones: [N]
+
+## Architecture & Component Design
+- Layering / Component Layout:
+  - [Component / Layer A]: [Role & Responsibilities]
+  - [Component / Layer B]: [Role & Responsibilities]
+- UI Design Source Alignment:
+  - Screens to be recreated natively from $PROTOTYPE_DIR / Source Views: [List screen names if applicable]
+- Migration Baseline Alignment (if Road B was used):
+  - Reference Document: `ANALYSIS.md` & `CONVERSION_PLAN.md`
+  - Parity Baseline Test Cases to enforce at Step C9: [List sample cases from ANALYSIS.md Section 5]
+
+## Affected Files & Modules
+- [NEW] `path/to/new_file.ext`
+- [MODIFY] `path/to/existing_file.ext`
+- [DELETE] `path/to/obsolete_file.ext`
+
+## Dependencies Between Changes
+```mermaid
+graph TD
+    T001["T001: Data Model"] --> T002["T002: API Handler"]
+    T002 --> T003["T003: UI Screen"]
+```
+
+## Structured Design Decisions Presented at Step C5
+| Decision Area | Options Presented | Selected Option | Rationale |
+|---|---|---|---|
+| [e.g., Auth Library] | [A] Recommended, [B] Minimal, [C] Robust, [D] Custom | Option A | [Why chosen] |
+
+## Plan Approval Record
+- Approved By: [User]
+- Approval Timestamp: [YYYY-MM-DD HH:MM]
+- Specific User Conditions or Caveats: [None / Listed here]

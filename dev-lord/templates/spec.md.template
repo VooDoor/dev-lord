@@ -1,0 +1,54 @@
+# Specification
+
+## Current Summary
+- Total Requirements: [N]
+- Completed Requirements: [N]
+- In-Flight Requirements: [N]
+- Active Milestone: [Milestone Name / v1.0]
+
+## 1. Executive Vision & Target Personas
+- **Core Value Proposition:** [What problem this application solves and why]
+- **Target User Roles:**
+  - `[Role 1, e.g., Admin]`: [Primary goals and permissions]
+  - `[Role 2, e.g., Customer]`: [Primary goals and permissions]
+
+## 2. Requirements Inventory
+| Req ID | Title | User Story / Description | Concrete Acceptance Criteria | Priority | Status | Linked Tasks |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| R1 | User Onboarding | As a new user... | 1. Validation... 2. Email verification... | P0 | OPEN | T001, T002 |
+| R2 | Invoicing System | As an admin... | 1. PDF generation... 2. Tax calculations... | P1 | OPEN | T003 |
+
+## 3. Screen & View Inventory Table (Feeds Road U & Native UI)
+| Screen / View Name | Primary User Journey | Key Functional Components & Elements | Source Prototype File (if Road U used) |
+| :--- | :--- | :--- | :--- |
+| Dashboard | Main Overview | KPI tiles, analytics chart, recent orders table | `./ui-prototype/index.html` |
+| Deals Pipeline | Sales Workflow | Drag-and-drop Kanban board, deal stages, filters | `./ui-prototype/pipeline.html` |
+| Invoices | Billing Management | Data table with search, status filters, print action | `./ui-prototype/invoices.html` |
+
+## 4. Conceptual Data Entities & Lifecycle States
+- **Entity: `[Entity Name, e.g., Order]`**
+  - Key Attributes: `[id, user_id, amount, status, timestamps]`
+  - Lifecycle States: `[Draft] -> [Pending Payment] -> [Processing] -> [Completed] | [Cancelled]`
+- **Entity: `[Entity Name, e.g., User]`**
+  - Key Attributes: `[id, email, role, is_active]`
+
+## 5. Scope Boundaries (YAGNI Enforcement)
+### In-Scope (Current Milestone)
+- [Explicitly confirmed capability 1]
+- [Explicitly confirmed capability 2]
+
+### Out-of-Scope (Postponed or Rejected)
+- [Explicitly excluded feature / future phase]
+- [Unrequested abstractions or speculative hooks]
+
+## 6. Clarification & Prototype Sync Log
+
+### 6.1 Clarification & Advisory Log
+| Date | Topic / Question Raised | User Confirmed Answer | Structured Option Chosen |
+| :--- | :--- | :--- | :--- |
+| YYYY-MM-DD | [Blindspot raised during Phase A3 or Gate C4] | [Confirmed decision] | Option A (Recommended) |
+
+### 6.2 Prototype Sync Log
+| Date | Screen / Component | Discovery / UI Modification | Spec Section Updated | User Approved (Yes/No) |
+| :--- | :--- | :--- | :--- | :--- |
+| YYYY-MM-DD | [Screen filename / component] | [Field/workflow added or adjusted] | [e.g. Section 2, R3] | Yes |

@@ -1,0 +1,18 @@
+# Architectural Decisions Log
+
+## Current Summary
+- Total Decisions Logged: [N]
+- Active Architecture Reviews / Circuit Breakers: [None / Listed]
+
+## Pre-Flight Stress-Test Log (Step C7)
+Before code was written, the plan was stress-tested against 3 failure modes:
+| Potential Failure Mode | Impact | Covered by Task / Resolution |
+|---|---|---|
+| 1. [e.g., Null / empty input] | Runtime 500 error | Covered by T002 input validator |
+| 2. [e.g., Database timeout] | Connection pool exhausted | Added retry logic in T001 |
+| 3. [e.g., Session expiration race] | Corrupted user profile | Handled via atomic lock in T003 |
+
+## Decisions & Rationale
+| Date | Task ID | Decision Made | Rationale & Trade-offs | Lightweight Quality Findings |
+|---|---|---|---|---|
+| YYYY-MM-DD | T001 | [e.g., Selected Redis for caching] | [Low latency, supports TTL out of the box] | Pass (Minor: add docstring to cache manager) |

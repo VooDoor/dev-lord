@@ -1,0 +1,15 @@
+# Progress Log
+
+## Current Summary
+- Last Updated: [Date]
+- Last Completed Task: [None / ID: Title]
+- Next Open Task: [ID: Title]
+- Current Track: [Full Track / Express Lite Track]
+- Version Control Mode: [Git Mode | Snapshot Mode]
+- Active Working Feature Branch: [feature/... / N/A (Lite / No Git)]
+
+## Chronological Entries
+| Timestamp | Task ID / Track | Files Touched | Verification Command Executed | Observed Result | Status |
+|---|---|---|---|---|---|
+| YYYY-MM-DD HH:MM | T001 (FULL) | `db/schema.sql` | `npm run migrate` | Table created with 0 errors | PASS |
+| YYYY-MM-DD HH:MM | LITE | `src/utils.js` | `npm test -- test/utils.test.js` | 4 tests passed, 0 failures | PASS |
